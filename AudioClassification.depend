@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1494600382 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/WavRead.cpp
+	<iostream>
+	<cstdio>
+	<cmath>
+	"string.h"
+	<stdlib.h>
+
+1494603397 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/WavReaderStandford.cpp
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
