@@ -31,8 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="WavRead.cpp" />
-		<Unit filename="WavReaderStandford.cpp" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

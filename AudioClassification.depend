@@ -1,14 +1,18 @@
 # depslib dependency file v1.0
-1494600382 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/WavRead.cpp
+1494698734 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/main.cpp
 	<iostream>
-	<cstdio>
-	<cmath>
-	"string.h"
 	<stdlib.h>
+	<math.h>
+	"wav-utils.h"
 
-1494603397 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/WavReaderStandford.cpp
-	<iostream>
+1494699955 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/wav-utils.h
 	<stdio.h>
-	<stdlib.h>
 	<string.h>
+	"transforms.h"
+
+1494666221 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/wav-utils.h
+	<stdio.h>
+	<string.h>
+
+1494699937 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/transforms.h
 
