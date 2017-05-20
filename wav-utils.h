@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
 #include "transforms.h"
+#include "kiss_fft.h"
+using namespace std;
 
 struct WavHeader {
     char chunkId[5];
@@ -17,6 +20,11 @@ struct WavHeader {
     char subChunk2Id[5];//data chunk
     unsigned int subChunk2Size;
 } headerTemplate;
+
+FourierComplex {
+    double * real;
+    double * imag;
+}
 
 struct WavData {
     short int * sampleChannel[2];
@@ -77,39 +85,48 @@ WavFile * getWavFile(const char* filename) {
             }
         } while(true);
 //        cout << "Finished reading\n";
-//        cout << "Header's size:    " << sizeof(header) << " bytes" << endl;
-//        cout << "Chunk id:         " << header.chunkId << endl;
-//        cout << "Chunk size:       " << header.chunkSize << endl;
-//        cout << "format:           " << header.format << endl;
-//        cout << "Sub Chunk id:     " << header.subChunk1Id << endl;
-//        cout << "Sk size:          " << header.subChunk1Size << endl;
-//        cout << "Audio format:     " << header.audioFormat << endl;
-//        cout << "No channels:      " << header.numChannels << endl;
-//        cout << "Sampling rate:    " << header.sampleRate << " Hz" << endl;
-//        cout << "Byte rate:        " << header.byteRate << endl;
-//        cout << "Block align:      " << header.blockAlign << endl;
-//        cout << "Bit per sample:   " << header.bitsPerSample << endl;
-//        cout << "Sub Chunk id 2:   " << header.subChunk2Id << endl;
-//        cout << "Sk2 size:         " << header.subChunk2Size << endl;
+        cout << "Header's size:    " << sizeof(header) << " bytes" << endl;
+        cout << "Chunk id:         " << header.chunkId << endl;
+        cout << "Chunk size:       " << header.chunkSize << endl;
+        cout << "format:           " << header.format << endl;
+        cout << "Sub Chunk id:     " << header.subChunk1Id << endl;
+        cout << "Sk size:          " << header.subChunk1Size << endl;
+        cout << "Audio format:     " << header.audioFormat << endl;
+        cout << "No channels:      " << header.numChannels << endl;
+        cout << "Sampling rate:    " << header.sampleRate << " Hz" << endl;
+        cout << "Byte rate:        " << header.byteRate << endl;
+        cout << "Block align:      " << header.blockAlign << endl;
+        cout << "Bit per sample:   " << header.bitsPerSample << endl;
+        cout << "Sub Chunk id 2:   " << header.subChunk2Id << endl;
+        cout << "Sk2 size:         " << header.subChunk2Size << endl;
         //allocate new memory for data
         wavFile->numSamples = header.subChunk2Size * 8 / header.bitsPerSample / header.numChannels;
         unsigned int channelSize = header.bitsPerSample / 8;
-//        cout << "Total sample:     " << wavFile->numSamples << endl;
-//        cout << "Channel size:     " << channelSize << endl;
+        cout << "Total sample:     " << wavFile->numSamples << endl;
+        cout << "Channel size:     " << channelSize << endl;
         for(int i = 0; i < header.numChannels; i++) {
             wavFile->data->sampleChannel[i] = new short int[wavFile->numSamples];
             wavFile->realX[i] = new double[wavFile->numSamples];
             wavFile->imaginX[i] = new double[wavFile->numSamples];
         }
+        kiss_fft_cpx * inData = new kiss_fft_cpx[wavFile->numSamples];
+        kiss_fft_cpx * outData = new kiss_fft_cpx[wavFile->numSamples];;
         for(int i = 0; i < wavFile->numSamples; i++) {
             for(int j = 0; j < header.numChannels; j++) {
                 fread(&wavFile->data->sampleChannel[j][i], 1, sizeof(wavFile->data->sampleChannel[j][i]), fileIn);
             }
+            inData[i].r = wavFile->data->sampleChannel[0][i];
+            inData[i].i = 0;
         }
+        kiss_fft_cfg cfg = kiss_fft_alloc(10000,false ,0,0);
+        kiss_fft( cfg , inData, outData);
+//
         dft(10000, wavFile->data->sampleChannel[0], wavFile->realX[0], wavFile->imaginX[0]);
-        for(int i = 0; i < 10000; i++) {
-            printf("%hd %.5lf %.5lf\n", data.sampleChannel[0][i], wavFile->realX[0][i], wavFile->imaginX[0][i]);
-        }
+        cout << "idft\n";
+        idft(10000, wavFile->data->sampleChannel[0], wavFile->realX[0], wavFile->imaginX[0]);
+//        for(int i = 0; i < 10000; i++) {
+//            printf("%hd %.5lf %.5lf\n", i, outData[i].r, outData[i].i);
+//        }
 
     } else {
         fclose(fileIn);

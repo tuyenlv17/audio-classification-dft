@@ -31,7 +31,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="kiss_fft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="kiss_fft.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="transforms.h" />
+		<Unit filename="wav-utils.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

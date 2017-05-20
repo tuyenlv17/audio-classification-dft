@@ -1,18 +1,36 @@
 # depslib dependency file v1.0
-1494698734 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/main.cpp
+1494749903 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/main.cpp
 	<iostream>
 	<stdlib.h>
 	<math.h>
 	"wav-utils.h"
 
-1494699955 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/wav-utils.h
+1494752019 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/wav-utils.h
 	<stdio.h>
 	<string.h>
+	<iostream>
 	"transforms.h"
+	"kiss_fft.h"
 
 1494666221 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/wav-utils.h
 	<stdio.h>
 	<string.h>
 
-1494699937 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/transforms.h
+1494752475 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/transforms.h
+
+1342562046 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/kiss_fft.c
+	"_kiss_fft_guts.h"
+
+1342562046 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/_kiss_fft_guts.h
+	"kiss_fft.h"
+	<limits.h>
+	<alloca.h>
+
+1342562046 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/kiss_fft.h
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<string.h>
+	<xmmintrin.h>
+	<sys/types.h>
 
