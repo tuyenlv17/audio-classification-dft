@@ -1,36 +1,42 @@
-void dft(int numSamples, short int * x, double * realX, double * imaginX) {
-    for(int i = 0; i < numSamples; i++) {
-//        printf("\r%d%%", i * 100 / numSamples);
-//        fflush(stdout);
-        double fundFreq = 2 * M_PI * i / numSamples;
-        realX[i] = imaginX[i] = 0;
-        for(int j = 0; j < numSamples; j++) {
-            realX[i] += x[j] * cos(fundFreq * j);
-            imaginX[i] -= x[j] * sin(fundFreq * j);
-        }
+#include <complex>
+#include <iostream>
+using namespace std;
+typedef std::complex<double> Complex;
+
+void dft(int numSamples, Complex * x, Complex * X, bool isInv) {
+    int co = 1;
+    if(isInv) {
+        co = numSamples;
     }
-//    printf("\rFinished!");
-//    fflush(stdout);
+    for(int i = 0; i < numSamples; i++) {
+        double fundFreq = 2 * M_PI * i / numSamples;
+        X[i].real() = X[i].imag() = 0;
+        for(int j = 0; j < numSamples; j++) {
+            Complex expCom = std::polar(1.0, -fundFreq * j);
+            X[i] += x[j] * expCom;
+        }
+        X[i] /= numSamples;
+    }
 }
 
-void idft(int numSamples, short int * x, double * realX, double * imaginX) {
-    for(int i = 0; i < numSamples; i++) {
-//        printf("\r%d%%", i * 100 / numSamples);
-//        fflush(stdout);
-        double fundFreq = 2 * M_PI * i / numSamples;
-        double rx = 0, ix = 0;
-        for(int j = 0; j < numSamples; j++) {
-            rx += realX[j] * cos(fundFreq * j) - imaginX[j] * sin(fundFreq * j);
-            ix += realX[j] * sin(fundFreq * j) + imaginX[j] * cos(fundFreq * j);
-        }
-//        printf("%.5lf %.5lf\n", rx / numSamples, ix / numSamples);
+//Cooley–Tukey FFT
+void fft(int N, Complex * x) {
+    if(N <= 1) {
+        return;
     }
-//    printf("\rFinished!");
-//    fflush(stdout);
-}
-
-void fft(int numSamples, short int * x, float * realX, float * imaginX) {
-
+    Complex * segment[2];//even and odd index sets
+    segment[0] = new Complex[N / 2];
+    segment[1] = new Complex[N / 2];
+    for(int i = 0; i < N; i++) {
+        segment[i % 2][i / 2] = x[i];
+    }
+    fft(N / 2, segment[0]);//even
+    fft(N / 2, segment[1]);//even
+    for(int i = 0; i < N / 2; i++) {
+        Complex tp = std::polar(1.0, -2 * M_PI * i / N) * segment[1][i];
+        x[i] = segment[0][i] + tp;
+        x[i + N / 2] = segment[0][i] - tp;
+    }
 }
 
 
@@ -44,4 +50,8 @@ void dct(int numSamples, short int * x, double * X) {
         }
         X[i] *= ci;
     }
+}
+
+void fct(int numSamples, short int * x, double * X) {
+
 }

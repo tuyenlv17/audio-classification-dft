@@ -2,7 +2,6 @@
 #include <string.h>
 #include <iostream>
 #include "transforms.h"
-#include "kiss_fft.h"
 using namespace std;
 
 struct WavHeader {
@@ -35,13 +34,19 @@ struct WavFile {
     WavHeader * header;
     WavData * data;
     int * features;
-    double * realX[2];
-    double * imaginX[2];
 };
+
+
+template <typename T>
+void comp2Arr(int N, T * arr,Complex * x) {
+    for(int i = 0; i < N; i++) {
+        x[i].real() = arr[i];
+        x[i].imag() = 0;
+    }
+}
 
 WavFile * getWavFile(const char* filename) {
     FILE *fileIn = fopen(filename, "rb");
-    freopen("out.txt", "w", stdout);
     WavFile * wavFile = new WavFile;
     WavHeader header;
     WavData data;
@@ -104,27 +109,31 @@ WavFile * getWavFile(const char* filename) {
         unsigned int channelSize = header.bitsPerSample / 8;
         cout << "Total sample:     " << wavFile->numSamples << endl;
         cout << "Channel size:     " << channelSize << endl;
+
         for(int i = 0; i < header.numChannels; i++) {
             wavFile->data->sampleChannel[i] = new short int[wavFile->numSamples];
-            wavFile->realX[i] = new double[wavFile->numSamples];
-            wavFile->imaginX[i] = new double[wavFile->numSamples];
         }
-        kiss_fft_cpx * inData = new kiss_fft_cpx[wavFile->numSamples];
-        kiss_fft_cpx * outData = new kiss_fft_cpx[wavFile->numSamples];;
+
         for(int i = 0; i < wavFile->numSamples; i++) {
             for(int j = 0; j < header.numChannels; j++) {
                 fread(&wavFile->data->sampleChannel[j][i], 1, sizeof(wavFile->data->sampleChannel[j][i]), fileIn);
             }
-            inData[i].r = wavFile->data->sampleChannel[0][i];
-            inData[i].i = 0;
         }
-//        kiss_fft_cfg cfg = kiss_fft_alloc(10000,false ,0,0);
-//        kiss_fft( cfg , inData, outData);
-//
-        dct(10000, wavFile->data->sampleChannel[0], wavFile->realX[0]);
+//        dct(wavFile->numSamples, wavFile->data->sampleChannel[0], wavFile->realX[0]);
 //        idft(10000, wavFile->data->sampleChannel[0], wavFile->realX[0], wavFile->imaginX[0]);
-        for(int i = 0; i < 10000; i++) {
-            printf("%d %.5lf\n", i, wavFile->realX[0][i]);
+
+        Complex * x, * X;
+        x = new Complex[wavFile->numSamples];
+        X = new Complex[wavFile->numSamples];
+        comp2Arr(wavFile->numSamples, wavFile->data->sampleChannel[0], x);
+//        dft(wavFile->numSamples, x, X, false);
+        int testNum = 1024;
+        dft(testNum, x, X, false);
+        fft(testNum, x);
+        freopen("out.txt", "w", stdout);
+        for(int i = 0; i < testNum; i++) {
+            printf("%5d %.5lf %.5lf\n", i, X[i].real(), X[i].imag());
+            printf("      %.5lf %.5lf\n", i, x[i].real(), x[i].imag());
         }
 
     } else {
