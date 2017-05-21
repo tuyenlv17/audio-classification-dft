@@ -13,7 +13,7 @@ void dft(int numSamples, short int * x, double * realX, double * imaginX) {
 //    fflush(stdout);
 }
 
-void idft(int numSamples, short double * x, double * realX, double * imaginX) {
+void idft(int numSamples, short int * x, double * realX, double * imaginX) {
     for(int i = 0; i < numSamples; i++) {
 //        printf("\r%d%%", i * 100 / numSamples);
 //        fflush(stdout);
@@ -36,6 +36,12 @@ void fft(int numSamples, short int * x, float * realX, float * imaginX) {
 
 void dct(int numSamples, short int * x, double * X) {
     for(int i = 0; i < numSamples; i++) {
-
+        double ci = sqrt((double)(i == 0 ? 1 : 2) / numSamples);
+        double fundFreq = M_PI * i / numSamples;
+        X[i] = 0;
+        for(int j = 0; j < numSamples; j++) {
+            X[i] += x[j] * cos(fundFreq * (j + 0.5));
+        }
+        X[i] *= ci;
     }
 }

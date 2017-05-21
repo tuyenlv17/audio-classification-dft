@@ -21,10 +21,10 @@ struct WavHeader {
     unsigned int subChunk2Size;
 } headerTemplate;
 
-FourierComplex {
+struct FourierComplex {
     double * real;
     double * imag;
-}
+};
 
 struct WavData {
     short int * sampleChannel[2];
@@ -118,15 +118,14 @@ WavFile * getWavFile(const char* filename) {
             inData[i].r = wavFile->data->sampleChannel[0][i];
             inData[i].i = 0;
         }
-        kiss_fft_cfg cfg = kiss_fft_alloc(10000,false ,0,0);
-        kiss_fft( cfg , inData, outData);
+//        kiss_fft_cfg cfg = kiss_fft_alloc(10000,false ,0,0);
+//        kiss_fft( cfg , inData, outData);
 //
-        dft(10000, wavFile->data->sampleChannel[0], wavFile->realX[0], wavFile->imaginX[0]);
-        cout << "idft\n";
-        idft(10000, wavFile->data->sampleChannel[0], wavFile->realX[0], wavFile->imaginX[0]);
-//        for(int i = 0; i < 10000; i++) {
-//            printf("%hd %.5lf %.5lf\n", i, outData[i].r, outData[i].i);
-//        }
+        dct(10000, wavFile->data->sampleChannel[0], wavFile->realX[0]);
+//        idft(10000, wavFile->data->sampleChannel[0], wavFile->realX[0], wavFile->imaginX[0]);
+        for(int i = 0; i < 10000; i++) {
+            printf("%d %.5lf\n", i, wavFile->realX[0][i]);
+        }
 
     } else {
         fclose(fileIn);
