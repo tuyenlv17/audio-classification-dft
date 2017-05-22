@@ -27,27 +27,6 @@ void dft(int numSamples, Complex * x, Complex * X, bool isInv) {
     }
 }
 
-//Cooley–Tukey FFT
-void fft(int N, Complex * x) {
-    if(N <= 1) {
-        return;
-    }
-    Complex * segment[2];//even and odd index sets
-    segment[0] = new Complex[N / 2];
-    segment[1] = new Complex[N / 2];
-    for(int i = 0; i < N; i++) {
-        segment[i % 2][i / 2] = x[i];
-    }
-    fft(N / 2, segment[0]);//even
-    fft(N / 2, segment[1]);//even
-    for(int i = 0; i < N / 2; i++) {
-        Complex tp = std::polar(1.0, -2 * M_PI * i / N) * segment[1][i];
-        x[i] = segment[0][i] + tp;
-        x[i + N / 2] = segment[0][i] - tp;
-    }
-    delete[] segment[0];
-    delete[] segment[1];
-}
 
 template <typename T>
 void dct(int numSamples, T * x, double * X) {
@@ -62,8 +41,28 @@ void dct(int numSamples, T * x, double * X) {
     }
 }
 
+//Cooley–Tukey FFT
+void fft(int N, Complex * x) {
+    if(N <= 1) {
+        return;
+    }
+    Complex * segment[2];//even and odd index sets
+    segment[0] = new Complex[N / 2];
+    segment[1] = new Complex[N / 2];
+    for(int i = 0; i < N; i++) {
+        segment[i % 2][i / 2] = x[i];
+    }
+    fft(N / 2, segment[0]);//even
+    fft(N / 2, segment[1]);//old
+    for(int i = 0; i < N / 2; i++) {
+        Complex tp = std::polar(1.0, -2 * M_PI * i / N) * segment[1][i];
+        x[i] = segment[0][i] + tp;
+        x[i + N / 2] = segment[0][i] - tp;
+    }
+    delete[] segment[0];
+    delete[] segment[1];
+}
 
-//Makhoul algorithm, cal type 2 dct from 2N fft
 template <typename T>
 void fct(int numSamples, T * x, double * X) {
     Complex * xComp = new Complex[numSamples * 2];

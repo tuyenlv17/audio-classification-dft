@@ -1,12 +1,14 @@
 # depslib dependency file v1.0
-1495431148 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/main.cpp
+1495447304 source:/home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/main.cpp
 	<iostream>
 	<stdlib.h>
 	<math.h>
 	<string>
+	<fstream>
+	<iomanip>
 	"wav-utils.h"
 
-1495430463 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/wav-utils.h
+1495434080 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/wav-utils.h
 	<stdio.h>
 	<string.h>
 	<iostream>
@@ -17,7 +19,7 @@
 	<stdio.h>
 	<string.h>
 
-1495431320 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/transforms.h
+1495444060 /home/tuyenlv/data/learning/school/sem8/multimedia-database-system/project/AudioClassification/transforms.h
 	<complex>
 	<iostream>
 
