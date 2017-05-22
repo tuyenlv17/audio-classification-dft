@@ -92,7 +92,7 @@ void calSilientRate(WavFile * wavFile) {
 
 void calSpecCentroid(WavFile * wavFile) {
     wavFile->specCentroid = 0;
-    double scaleFactor = 1;
+    double scaleFactor = 1000;
     double sW = 0;
     for(int i = 0; i < wavFile->numSamples; i++) {
         double magnitude = abs(wavFile->dct[i]);
@@ -100,6 +100,7 @@ void calSpecCentroid(WavFile * wavFile) {
         sW += magnitude;
     }
     wavFile->specCentroid /= sW;
+    wavFile->specCentroid /= scaleFactor;
 }
 
 void calBandwidth(WavFile * wavFile) {
@@ -206,7 +207,10 @@ WavFile * getWavFile(const char* filename) {
 ////            cout << data.sampleChannel[0][i] << endl;
 //            printf("%.5lf %.5lf\n", );
 //        }
-            printf("%.5lf %.5lf %.5lf %.5lf\n", wavFile->meanEnergy, wavFile->zcRate, wavFile->silientRate, wavFile->specCentroid);
+//            printf("%.5lf %.5lf %.5lf %.5lf\n", wavFile->meanEnergy, wavFile->zcRate, wavFile->silientRate, wavFile->specCentroid);
+        delete[] wavFile->data->sampleChannel[0];
+        delete[] wavFile->data->sampleChannel[1];
+        delete[] wavFile->dct;
     } else {
         fclose(fileIn);
         return NULL;

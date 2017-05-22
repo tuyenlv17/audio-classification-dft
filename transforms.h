@@ -45,6 +45,8 @@ void fft(int N, Complex * x) {
         x[i] = segment[0][i] + tp;
         x[i + N / 2] = segment[0][i] - tp;
     }
+    delete[] segment[0];
+    delete[] segment[1];
 }
 
 template <typename T>
@@ -74,4 +76,5 @@ void fct(int numSamples, T * x, double * X) {
         xComp[i] *= std::polar(1.0, -M_PI * i / 2 / numSamples);
         X[i] = real(xComp[i]);
     }
+    delete[] xComp;
 }
