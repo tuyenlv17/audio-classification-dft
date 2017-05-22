@@ -3,6 +3,14 @@
 using namespace std;
 typedef std::complex<double> Complex;
 
+template <typename T>
+void arr2Comp(int N, T * arr,Complex * x) {
+    for(int i = 0; i < N; i++) {
+        x[i].real() = arr[i];
+        x[i].imag() = 0;
+    }
+}
+
 void dft(int numSamples, Complex * x, Complex * X, bool isInv) {
     int co = 1;
     if(isInv) {
@@ -39,8 +47,8 @@ void fft(int N, Complex * x) {
     }
 }
 
-
-void dct(int numSamples, short int * x, double * X) {
+template <typename T>
+void dct(int numSamples, T * x, double * X) {
     for(int i = 0; i < numSamples; i++) {
         double ci = sqrt((double)(i == 0 ? 1 : 2) / numSamples);
         double fundFreq = M_PI * i / numSamples;
@@ -52,6 +60,18 @@ void dct(int numSamples, short int * x, double * X) {
     }
 }
 
-void fct(int numSamples, short int * x, double * X) {
 
+//Makhoul algorithm, cal type 2 dct from 2N fft
+template <typename T>
+void fct(int numSamples, T * x, double * X) {
+    Complex * xComp = new Complex[numSamples * 2];
+    arr2Comp(numSamples, x, xComp);
+    for(int i = numSamples; i < 2 * numSamples; i++) {
+        xComp[i] = xComp[2 * numSamples - i - 1];
+    }
+    fft(2 * numSamples, xComp);
+    for(int i = 0; i < numSamples; i++) {
+        xComp[i] *= std::polar(1.0, -M_PI * i / 2 / numSamples);
+        X[i] = real(xComp[i]);
+    }
 }
